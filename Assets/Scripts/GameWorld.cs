@@ -38,9 +38,9 @@ public class GameWorld : MonoBehaviour
 
     void GenerateWorld()
     {
-        var numOfLakes = Random.Range(5, 15);
+        var totalLakes = Random.Range(5, 15);
 
-        for (int i = 0; i < numOfLakes; i++)
+        for (int lakeNum = 0; lakeNum < totalLakes; lakeNum++)
         {
             var location = new Vector3Int(
                     Random.Range(-X_BOUNDARY, X_BOUNDARY),
@@ -52,7 +52,20 @@ public class GameWorld : MonoBehaviour
             int waterRight = Random.Range(0, 20);
 
             AddLake(location, waterTop, waterBottom, waterLeft, waterRight);
+
+            var riversFromLakes = Random.Range(0, 3);
+            for (int riverNum = 0; riverNum < riversFromLakes; riverNum++)
+            {
+                AddRiver(location);
+            }
         }
+    }
+
+    private void AddRiver(Vector3Int center)
+    {
+        var originalDirection = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1));
+
+        
     }
 
     private void AddLake(Vector3Int center, float top, float bottom, float left, float right)
