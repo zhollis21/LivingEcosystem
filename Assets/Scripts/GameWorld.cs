@@ -7,7 +7,7 @@ public enum Directions { Up, Down, Left, Right }
 
 public class GameWorld : MonoBehaviour
 {
-    public Tile MyTile;
+    public Tile GrassTile;
     public Tile WaterTile;
 
     private Tilemap _tileMap;
@@ -19,11 +19,11 @@ public class GameWorld : MonoBehaviour
     {
         _tileMap = GetComponent<Tilemap>();
 
-        for (int x = -X_BOUNDARY; x < X_BOUNDARY; x++)
+        for (int x = -X_BOUNDARY; x <= X_BOUNDARY; x++)
         {
-            for (int y = -Y_BOUNDARY; y < Y_BOUNDARY; y++)
+            for (int y = -Y_BOUNDARY; y <= Y_BOUNDARY; y++)
             {
-                _tileMap.SetTile(new Vector3Int(x, y), MyTile);
+                _tileMap.SetTile(new Vector3Int(x, y), GrassTile);
             }
         }
 
@@ -38,7 +38,7 @@ public class GameWorld : MonoBehaviour
 
     void GenerateWorld()
     {
-        var numOfLakes = Random.Range(1, 10);
+        var numOfLakes = Random.Range(5, 15);
 
         for (int i = 0; i < numOfLakes; i++)
         {
@@ -55,119 +55,38 @@ public class GameWorld : MonoBehaviour
         }
     }
 
-    void AddLake(Vector3Int center, float top, float bottom, float left, float right)
+    private void AddLake(Vector3Int center, float top, float bottom, float left, float right)
     {
-        // Fill in center
-        _tileMap.SetTile(center, WaterTile);
-
-        // Fill in to top
-        for (int i = 0; i <= top; i++)
+        int circleResolution = 500;
+        while (right > 0 || top > 0 || bottom < 0 || left < 0)
         {
-            _tileMap.SetTile(new Vector3Int(center.x, center.y + i), WaterTile);
-        }
+            SetTilesInCircle(circleResolution, center, top, right, -bottom, -left);
 
-        FillInTilesFromTopToDownwardRight(center, top, right);
-
-        FillInTilesFromRightToBottomLeft(center, right, bottom);
-
-        FillInTilesFromBottomToUpperLeft(center, bottom, left);
-
-        FillInTilesFromLeftToTopRight(center, left, top);
-    }
-
-    Vector3 GetDirectionStepValue(float xPos, float yPos, Vector2Int direction)
-    {
-        Vector3 step;
-        xPos = Mathf.Abs(xPos);
-        yPos = Mathf.Abs(yPos);
-
-        if (yPos > xPos)
-        {
-            step = new Vector3(direction.x * xPos / yPos, direction.y);
-        }
-        else
-        {
-            step = new Vector3(direction.x, direction.y * yPos / xPos);
-        }
-
-        return step;
-    }
-
-    void FillInTilesFromTopToDownwardRight(Vector3Int center, float startYPos, float endXPos)
-    {
-        var step = GetDirectionStepValue(endXPos, startYPos, Vector2Int.down + Vector2Int.right);
-
-        Vector3 currentSpot = new Vector3(center.x, center.y + startYPos);
-        Vector3Int roundedSpot = Vector3Int.RoundToInt(currentSpot);
-
-        while (roundedSpot.x != center.x + endXPos || roundedSpot.y != center.y)
-        {
-            currentSpot += step;
-            roundedSpot = Vector3Int.RoundToInt(currentSpot);
-
-            for (int y = roundedSpot.y; y >= center.y; y--)
-            {
-                _tileMap.SetTile(new Vector3Int(roundedSpot.x, y), WaterTile);
-            }
+            right = Mathf.Max(0, right - 0.5f);
+            top = Mathf.Max(0, top - 0.5f);
+            bottom = Mathf.Min(0, bottom + 0.5f);
+            left = Mathf.Min(0, left + 0.5f);
         }
     }
 
-    void FillInTilesFromRightToBottomLeft(Vector3Int center, float startXPos, float endYPos)
+    private void SetTilesInCircle(float numberOfTilesInCircle, Vector3 center, float top, float right, float bottom, float left)
     {
-        var step = GetDirectionStepValue(startXPos, endYPos, Vector2Int.down + Vector2Int.left);
-
-        Vector3 currentSpot = new Vector3(center.x + startXPos, center.y);
-        Vector3Int roundedSpot = Vector3Int.RoundToInt(currentSpot);
-
-        // Fill in to up or down
-        while (roundedSpot.y != center.y + endYPos || roundedSpot.x != center.x)
+        for (int i = 0; i < numberOfTilesInCircle; i++)
         {
-            currentSpot += step;
-            roundedSpot = Vector3Int.RoundToInt(currentSpot);
+            var percent = i / numberOfTilesInCircle;
+            float xRadius = percent < 0.25 || percent > 0.75 ? right : left;
+            float yRadius = percent < 0.5 ? top : bottom;
 
-            for (int x = roundedSpot.x; x >= center.x; x--)
-            {
-                _tileMap.SetTile(new Vector3Int(x, roundedSpot.y), WaterTile);
-            }
-        }
-    }
+            float angle = percent * Mathf.PI * 2;
+            float x = Mathf.Cos(angle) * xRadius;
+            float y = Mathf.Sin(angle) * yRadius;
 
-    void FillInTilesFromBottomToUpperLeft(Vector3Int center, float startYPos, float endXPos)
-    {
-        var step = GetDirectionStepValue(endXPos, startYPos, Vector2Int.up + Vector2Int.left);
-
-        Vector3 currentSpot = new Vector3(center.x, center.y + startYPos);
-        Vector3Int roundedSpot = Vector3Int.RoundToInt(currentSpot);
-
-        while (roundedSpot.x != center.x + endXPos || roundedSpot.y != center.y)
-        {
-            currentSpot += step;
-            roundedSpot = Vector3Int.RoundToInt(currentSpot);
-
-            for (int y = roundedSpot.y; y <= center.y; y++)
-            {
-                _tileMap.SetTile(new Vector3Int(roundedSpot.x, y), WaterTile);
-            }
-        }
-    }
-
-    void FillInTilesFromLeftToTopRight(Vector3Int center, float startXPos, float endYPos)
-    {
-        var step = GetDirectionStepValue(startXPos, endYPos, Vector2Int.up + Vector2Int.right);
-
-        Vector3 currentSpot = new Vector3(center.x + startXPos, center.y);
-        Vector3Int roundedSpot = Vector3Int.RoundToInt(currentSpot);
-
-        // Fill in to up or down
-        while (roundedSpot.y != center.y + endYPos || roundedSpot.x != center.x)
-        {
-            currentSpot += step;
-            roundedSpot = Vector3Int.RoundToInt(currentSpot);
-
-            for (int x = roundedSpot.x; x <= center.x; x++)
-            {
-                _tileMap.SetTile(new Vector3Int(x, roundedSpot.y), WaterTile);
-            }
+            Vector3Int pos = Vector3Int.RoundToInt(
+                new Vector2(
+                    Mathf.Clamp(center.x + x, -X_BOUNDARY, X_BOUNDARY),
+                    Mathf.Clamp(center.y + y, -Y_BOUNDARY, Y_BOUNDARY)));
+            
+            _tileMap.SetTile(pos, WaterTile);
         }
     }
 }
