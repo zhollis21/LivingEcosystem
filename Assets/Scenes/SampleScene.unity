@@ -419,6 +419,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrassTile: {fileID: 11400000, guid: 70036650f1947e34a83f4340b0e6cdf9, type: 2}
   WaterTile: {fileID: 11400000, guid: 34c1b04c3cf2c4b4880131edaab2334e, type: 2}
+  SandTile: {fileID: 11400000, guid: 8a56a660f783d94468f856815f60eff1, type: 2}
+  TempRiverTile: {fileID: 11400000, guid: bdea1aea2eeddb3449febf8440bc315e, type: 2}
 --- !u!1 &1603166976
 GameObject:
   m_ObjectHideFlags: 0
