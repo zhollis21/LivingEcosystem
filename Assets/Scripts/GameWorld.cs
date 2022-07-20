@@ -21,6 +21,20 @@ public class GameWorld : MonoBehaviour
     {
         _tileMap = GetComponent<Tilemap>();
 
+        GenerateWorld();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            GenerateWorld();
+        }
+    }
+
+    void GenerateWorld()
+    {
         for (int x = -X_BOUNDARY; x <= X_BOUNDARY; x++)
         {
             for (int y = -Y_BOUNDARY; y <= Y_BOUNDARY; y++)
@@ -29,17 +43,6 @@ public class GameWorld : MonoBehaviour
             }
         }
 
-        GenerateWorld();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void GenerateWorld()
-    {
         var totalLakes = Random.Range(5, 15);
 
         for (int lakeNum = 0; lakeNum < totalLakes; lakeNum++)
