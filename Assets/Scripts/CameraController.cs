@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class CameraController : MonoBehaviour
 {
+    public Transform MapTransform;
     private Camera _camera;
-    private int _minCameraZoom = 1;
-    private int _maxCameraZoom = 100;
+    private readonly float _minCameraScale = 0.5f;
+    private readonly float _maxCameraScale = 5f;
     private Vector3 _mouseDragOrigin;
 
     // Start is called before the first frame update
@@ -35,15 +37,31 @@ public class CameraController : MonoBehaviour
         {
             Vector3 difference = _mouseDragOrigin - _camera.ScreenToWorldPoint(Input.mousePosition);
 
+            difference.x = Mathf.Abs(difference.x) < 0.1 ? 0 : difference.x;
+            difference.y = Mathf.Abs(difference.y) < 0.1 ? 0 : difference.y;
+
+            if (difference.sqrMagnitude < 0.1f)
+            {
+                return;
+            }
+
             _camera.transform.position += difference;
         }
     }
 
     void ZoomCamera(float scrollValue)
     {
-        float newSize = _camera.orthographicSize - scrollValue;
+        var tileScale = MapTransform.localScale;
+        var scaleChange = scrollValue * 0.05f * tileScale.x;
+        var newTileScale = Mathf.Clamp(scaleChange + tileScale.x, _minCameraScale, _maxCameraScale);
 
-        // Make sure the new zoom is within the bounds of the min and max
-        _camera.orthographicSize = Mathf.Clamp(newSize, _minCameraZoom, _maxCameraZoom);
+        MapTransform.localScale = new Vector3(newTileScale, newTileScale, -10);
+
+        // we have to calculate the real values becuase of clamping
+        var cameraPosScale = newTileScale / tileScale.x;
+        float cameraX = _camera.transform.position.x;
+        float cameraY = _camera.transform.position.y;
+
+        _camera.transform.position = new Vector3(cameraX * cameraPosScale, cameraY * cameraPosScale, -10);
     }
 }
