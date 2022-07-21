@@ -7,8 +7,8 @@ public enum Directions { Up, Down, Left, Right }
 
 public class GameWorld : MonoBehaviour
 {
-    public Tile GrassTile;
-    public Tile WaterTile;
+    public List<TileBase> GrassTiles;
+    public List<TileBase> WaterTiles;
     public Tile SandTile;
     public Tile TempRiverTile;
 
@@ -39,7 +39,7 @@ public class GameWorld : MonoBehaviour
         {
             for (int y = -Y_BOUNDARY; y <= Y_BOUNDARY; y++)
             {
-                _tileMap.SetTile(new Vector3Int(x, y), GrassTile);
+                _tileMap.SetTile(new Vector3Int(x, y), PickRandomTile(GrassTiles, true, 0, 0.9f));
             }
         }
 
@@ -72,18 +72,19 @@ public class GameWorld : MonoBehaviour
         var currentPosition = center;
         var originalDirection = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
         bool hasHitLand = false;
-        var doNotReplaceTiles = new List<TileBase> { WaterTile, TempRiverTile };
+        var doNotReplaceTiles = new List<TileBase>(WaterTiles);
+        doNotReplaceTiles.Add(TempRiverTile);
 
         while (IsWithinMapBounds(currentPosition))
         {
             var directionVariation = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
             currentPosition += Vector3Int.RoundToInt(originalDirection + directionVariation);
 
-            if (_tileMap.GetTile(currentPosition) != WaterTile)
+            if (!WaterTiles.Contains(_tileMap.GetTile(currentPosition)))
             {
                 hasHitLand = true;
             }
-            else if (hasHitLand && _tileMap.GetTile(currentPosition) == WaterTile)
+            else if (hasHitLand && WaterTiles.Contains(_tileMap.GetTile(currentPosition)))
             {
                 FillInNewRiverTiles();
                 return;
@@ -119,10 +120,33 @@ public class GameWorld : MonoBehaviour
             {
                 if (_tileMap.GetTile(new Vector3Int(x, y)) == TempRiverTile)
                 {
-                    _tileMap.SetTile(new Vector3Int(x, y), WaterTile);
+                    _tileMap.SetTile(new Vector3Int(x, y), PickRandomTile(WaterTiles));
                 }
             }
         }
+    }
+
+    private TileBase PickRandomTile(List<TileBase> tiles, bool hasNormalTile = false, int normalTilePos = 0, float percentToPickNormal = 0.75f)
+    {
+        if (hasNormalTile && Random.Range(0f, 1f) <= percentToPickNormal)
+        {
+            return tiles[normalTilePos];
+        }
+
+        if (tiles == null || tiles.Count == 0)
+        {
+            return null;
+        }
+
+        int index = Random.Range(0, tiles.Count - 1);
+
+        // If there is a normal tile it's already had it's shot, we will reroll once to try to pick another 
+        if (hasNormalTile && index == normalTilePos)
+        {
+            index = Random.Range(0, tiles.Count - 1);
+        }
+
+        return tiles[index];
     }
 
     private bool IsWithinMapBounds(Vector3 pos)
@@ -134,19 +158,18 @@ public class GameWorld : MonoBehaviour
     private void AddLake(Vector3Int center, float top, float bottom, float left, float right)
     {
         int circleResolution = 200;
-        var doNotReplaceTiles = new List<TileBase> { WaterTile };
 
         // First add some circles of sand on the outside
         int sandPerimeters = 2;
         for (int i = 1; i <= sandPerimeters; i++)
         {
-            SetTilesInCircle(circleResolution, center, top + i, right + i, bottom + i, left + i, SandTile, doNotReplaceTiles);
+            SetTilesInCircle(circleResolution, center, top + i, right + i, bottom + i, left + i, SandTile, WaterTiles);
         }
 
         // Then fill in the water from outer most circle to inner most circle
         while (right > 0 || top > 0 || bottom > 0 || left > 0)
         {
-            SetTilesInCircle(circleResolution, center, top, right, bottom, left, WaterTile, doNotReplaceTiles);
+            SetTilesInCircle(circleResolution, center, top, right, bottom, left, PickRandomTile(WaterTiles), WaterTiles);
 
             right = Mathf.Max(0, right - 0.5f);
             top = Mathf.Max(0, top - 0.5f);
@@ -155,7 +178,7 @@ public class GameWorld : MonoBehaviour
         }
     }
 
-    private void SetTilesInCircle(float numberOfTilesInCircle, Vector3 center, float top, float right, float bottom, float left, Tile tile, List<TileBase> doNotReplaceTiles)
+    private void SetTilesInCircle(float numberOfTilesInCircle, Vector3 center, float top, float right, float bottom, float left, TileBase tile, List<TileBase> doNotReplaceTiles)
     {
         for (int i = 0; i < numberOfTilesInCircle; i++)
         {
