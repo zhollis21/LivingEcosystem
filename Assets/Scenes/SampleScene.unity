@@ -440,25 +440,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GrassTiles:
-  - {fileID: 11400000, guid: c4a983c122710b543b1cfbaf7738ec86, type: 2}
-  - {fileID: 11400000, guid: d38b4adb791921d4892f6b6c5876fb33, type: 2}
-  - {fileID: 11400000, guid: 0c81069cac8501c47ab671682ea6d18e, type: 2}
-  - {fileID: 11400000, guid: 22415c1c0c81e364fa10a8b905a4c42e, type: 2}
-  - {fileID: 11400000, guid: acd3a50274afee04680b3be419b7ad16, type: 2}
-  - {fileID: 11400000, guid: 5c690aef7c295434cb97c71045d1da6f, type: 2}
-  - {fileID: 11400000, guid: c19c2067ac8371b4fbbe32971ee2830f, type: 2}
-  - {fileID: 11400000, guid: 1ea4e0dea6e8bf34ebe3ae2012becfab, type: 2}
-  - {fileID: 11400000, guid: 3d4894f632f19a948bbdba8a830ebe07, type: 2}
-  - {fileID: 11400000, guid: 75f85023d4ab1174a97b0b6cb2c6bbad, type: 2}
-  - {fileID: 11400000, guid: bfb7ada1b5e41e64eab75568aaf1990e, type: 2}
-  - {fileID: 11400000, guid: f74c1e837ecb50d449017c45e56f6ede, type: 2}
-  - {fileID: 11400000, guid: 713994e536d34dd459c4f00787fce452, type: 2}
+  - {fileID: 11400000, guid: 60a18a2361eb16b41a8e0d268d6b6dfd, type: 2}
   WaterTiles:
   - {fileID: 11400000, guid: 06cc2b0a57da5ae45baed298ce918008, type: 2}
   - {fileID: 11400000, guid: 0ccce320504d8a6419eeb41ec5111e46, type: 2}
   - {fileID: 11400000, guid: f3a03076b14dfd941b8909047ef11c0a, type: 2}
   - {fileID: 11400000, guid: 792ab6bc46796fa48ab368a53a591b40, type: 2}
-  SandTile: {fileID: 11400000, guid: 8a56a660f783d94468f856815f60eff1, type: 2}
+  SandTile: {fileID: 11400000, guid: 60a18a2361eb16b41a8e0d268d6b6dfd, type: 2}
   TempRiverTile: {fileID: 11400000, guid: bdea1aea2eeddb3449febf8440bc315e, type: 2}
 --- !u!1 &1603166976
 GameObject:

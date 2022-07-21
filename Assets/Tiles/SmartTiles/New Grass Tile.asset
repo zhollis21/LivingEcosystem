@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a04ed8d573a594941bc8373d23f210ce, type: 3}
+  m_Name: New Grass Tile
+  m_EditorClassIdentifier: 
+  GrassNormal: {fileID: -1459526056, guid: 4045b323e7153184bac555c933af6499, type: 3}
+  TopEdgeGrass: {fileID: 1660749443, guid: 4045b323e7153184bac555c933af6499, type: 3}
+  RightEdgeGrass: {fileID: -546407094, guid: 4045b323e7153184bac555c933af6499, type: 3}
+  BottomEdgeGrass: {fileID: -1403094019, guid: 4045b323e7153184bac555c933af6499, type: 3}
+  LeftEdgeGrass: {fileID: 748394898, guid: 4045b323e7153184bac555c933af6499, type: 3}

@@ -9,7 +9,7 @@ public class GameWorld : MonoBehaviour
 {
     public List<TileBase> GrassTiles;
     public List<TileBase> WaterTiles;
-    public Tile SandTile;
+    public TileBase SandTile;
     public Tile TempRiverTile;
 
     private Tilemap _tileMap;
@@ -29,7 +29,7 @@ public class GameWorld : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GenerateWorld();
+            //GenerateWorld();
         }
     }
 
@@ -128,14 +128,14 @@ public class GameWorld : MonoBehaviour
 
     private TileBase PickRandomTile(List<TileBase> tiles, bool hasNormalTile = false, int normalTilePos = 0, float percentToPickNormal = 0.75f)
     {
-        if (hasNormalTile && Random.Range(0f, 1f) <= percentToPickNormal)
-        {
-            return tiles[normalTilePos];
-        }
-
         if (tiles == null || tiles.Count == 0)
         {
             return null;
+        }
+
+        if (hasNormalTile && Random.Range(0f, 1f) <= percentToPickNormal)
+        {
+            return tiles[normalTilePos];
         }
 
         int index = Random.Range(0, tiles.Count - 1);
