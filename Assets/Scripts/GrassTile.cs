@@ -12,9 +12,12 @@ public class GrassTile : TileBase
 
     public override void RefreshTile(Vector3Int position, ITilemap tilemap)
     {
-        for (int x = -1; x <= 1; x++)
+        int xPos = position.x;
+        int yPos = position.y;
+
+        for (int x = xPos - 1; x <= xPos + 1; x++)
         {
-            for (int y = -1; y <= 1; y++)
+            for (int y = yPos - 1; y <= yPos + 1; y++)
             {
                 tilemap.RefreshTile(new Vector3Int(x, y));
             }
@@ -30,19 +33,19 @@ public class GrassTile : TileBase
         var bottomTIle = tilemap.GetTile(position + Vector3Int.down);
         var leftTile = tilemap.GetTile(position + Vector3Int.left);
 
-        if (topTile != null && topTile != this)
+        if (topTile != this)
         {
             tileData.sprite = TopEdgeGrass;
         }
-        else if (rightTile != null && rightTile != this)
+        else if (rightTile != this)
         {
             tileData.sprite = RightEdgeGrass;
         }
-        else if (bottomTIle != null && bottomTIle != this)
+        else if (bottomTIle != this)
         {
             tileData.sprite = BottomEdgeGrass;
         }
-        else if (leftTile != null && leftTile != this)
+        else if (leftTile != this)
         {
             tileData.sprite = LeftEdgeGrass;
         }

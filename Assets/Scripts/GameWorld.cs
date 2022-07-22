@@ -29,7 +29,7 @@ public class GameWorld : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            //GenerateWorld();
+            GenerateWorld();
         }
     }
 
