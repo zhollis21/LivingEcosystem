@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrassNormal: {fileID: -1459526056, guid: 4045b323e7153184bac555c933af6499, type: 3}
   TopEdgeGrass: {fileID: 1660749443, guid: 4045b323e7153184bac555c933af6499, type: 3}
+  TopLeftCornerGrass: {fileID: 97530361, guid: 4045b323e7153184bac555c933af6499, type: 3}
+  TopLeftRightGrass: {fileID: -1233602615, guid: 4045b323e7153184bac555c933af6499, type: 3}
+  TopBottomGrass: {fileID: -101550428, guid: 4045b323e7153184bac555c933af6499, type: 3}
   RightEdgeGrass: {fileID: -546407094, guid: 4045b323e7153184bac555c933af6499, type: 3}
+  TopRightCornerGrass: {fileID: -158058655, guid: 4045b323e7153184bac555c933af6499, type: 3}
   BottomEdgeGrass: {fileID: -1403094019, guid: 4045b323e7153184bac555c933af6499, type: 3}
   LeftEdgeGrass: {fileID: 748394898, guid: 4045b323e7153184bac555c933af6499, type: 3}

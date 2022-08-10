@@ -6,7 +6,11 @@ public class GrassTile : TileBase
 {
     public Sprite GrassNormal;
     public Sprite TopEdgeGrass;
+    public Sprite TopLeftCornerGrass;
+    public Sprite TopLeftRightGrass;
+    public Sprite TopBottomGrass;
     public Sprite RightEdgeGrass;
+    public Sprite TopRightCornerGrass;
     public Sprite BottomEdgeGrass;
     public Sprite LeftEdgeGrass;
 
@@ -35,7 +39,29 @@ public class GrassTile : TileBase
 
         if (topTile != this)
         {
-            tileData.sprite = TopEdgeGrass;
+            if (leftTile != this)
+            {
+                if (rightTile != this)
+                {
+                    tileData.sprite = TopLeftRightGrass;
+                }
+                else
+                {
+                    tileData.sprite = TopLeftCornerGrass;
+                }
+            }
+            else if (rightTile != this)
+            {
+                tileData.sprite = TopRightCornerGrass;
+            }
+            else if (bottomTIle != this)
+            {
+                tileData.sprite = TopBottomGrass;
+            }
+            else // Only the top
+            {
+                tileData.sprite = TopEdgeGrass;
+            }
         }
         else if (rightTile != this)
         {
